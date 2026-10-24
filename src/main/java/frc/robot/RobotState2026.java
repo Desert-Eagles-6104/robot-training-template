@@ -1,8 +1,8 @@
 package frc.robot;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import frc.DELib26.subsystems.vision.visionUtil.VisionSubsystemConfiguration;
 import frc.DELib26.util.RobotState;
+import frc.robot.constants.Constants;
 
 public class RobotState2026 extends RobotState {
 
@@ -11,8 +11,8 @@ public class RobotState2026 extends RobotState {
 	private int fuelShotCount = 0;
 
 
-	public RobotState2026(VisionSubsystemConfiguration visionConfig) {
-		super(visionConfig);
+	public RobotState2026() {
+		super(Constants.VisionConstants.VISION_CONFIG);
 	}
 
 	public boolean kickerHasFuel() {

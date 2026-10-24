@@ -16,6 +16,7 @@ import frc.DELib26.util.LoggerUtil;
 import frc.DELib26.util.MacAddressUtil;
 import frc.DELib26.util.RunMode;
 import frc.DELib26.util.VirtualSubsystem;
+import frc.robot.constants.Constants;
 import frc.robot.sim.SimBindings;
 import org.ironmaple.simulation.SimulatedArena;
 import org.littletonrobotics.junction.LogFileUtil;
@@ -99,7 +100,7 @@ public class Robot extends LoggedRobot {
 		for (int i = 0; i < UsbCamera.enumerateUsbCameras().length; i++) {
 			UsbCamera cam = CameraServer.startAutomaticCapture(i);
 			try {
-				cam.setFPS(15);
+				cam.setFPS(Constants.RobotConstants.USB_CAMERA_FPS);
 			} catch (Exception e) {
 				DriverStation.reportWarning(
 						"Failed to initialize camera " + i + ": " + e.getMessage(),
@@ -164,7 +165,7 @@ public class Robot extends LoggedRobot {
 
 		double now = Utils.getCurrentTimeSeconds();
 
-		double sampleTime = now - rc.constants.autonomousConstants.AUTONOMOUS_VISION_LOOKBACK_TIME_SECONDS;
+		double sampleTime = now - Constants.AutonomousConstants.AUTONOMOUS_VISION_LOOKBACK_TIME_SECONDS;
 
 		Optional<VisionFieldPoseEstimate> latestEstimate = rc.robotState2026.getLatestMegatagEstimate();
 

@@ -4,6 +4,7 @@ import frc.DELib26.bindings.Bindings;
 import frc.DELib26.bindings.ControllerDiagnosticsBindings;
 import frc.DELib26.subsystems.swerve.swerveBindings.SwerveGeneralBindings;
 import frc.DELib26.subsystems.swerve.swerveBindings.SwervePidCalibrationsBindings;
+import frc.robot.constants.Constants;
 
 import java.util.function.Function;
 public enum TestModeBindings {
@@ -14,7 +15,7 @@ public enum TestModeBindings {
 
 	SWERVE_PID_CALIBRATIONS((RobotContainer container) -> new SwervePidCalibrationsBindings(
 			container.swerveSubsystem,
-			container.constants.swerveConstants
+			Constants.SwerveConstants.SWERVE_CONFIG
 		)
 	),
 

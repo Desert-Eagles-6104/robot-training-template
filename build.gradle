@@ -22,7 +22,7 @@ java {
 
 def ROBOT_MAIN_CLASS = "frc.robot.Main"
 
-// -------------------- Deploy (same as template) --------------------
+
 deploy {
     targets {
         roborio(getTargetTypeClass("RoboRIO")) {
@@ -50,7 +50,7 @@ wpi.java.debugJni = false
 // Desktop support toggle (kept for clarity; GradleRIO uses it in some setups)
 def includeDesktopSupport = true
 
-// -------------------- Dependencies --------------------
+
 dependencies {
     // 2026 template includes this annotation processor
     annotationProcessor wpi.java.deps.wpilibAnnotations()
@@ -103,7 +103,7 @@ test {
     systemProperty "junit.jupiter.extensions.autodetection.enabled", "true"
 }
 
-// -------------------- Simulation --------------------
+
 wpi.sim.addGui().defaultEnabled = true
 wpi.sim.addDriverstation().defaultEnabled = true
 
@@ -127,7 +127,7 @@ deployArtifact.jarTask = jar
 wpi.java.configureExecutableTasks(jar)
 wpi.java.configureTestTasks(test)
 
-// -------------------- JavaCompile options --------------------
+
 tasks.withType(JavaCompile).configureEach {
     options.compilerArgs.add "-XDstringConcat=inline"
 
@@ -142,7 +142,7 @@ tasks.withType(JavaCompile).configureEach {
     }
 }
 
-// -------------------- Spotless --------------------
+
 project.compileJava.dependsOn(spotlessApply)
 spotless {
     java {
@@ -159,7 +159,6 @@ spotless {
     }
 }
 
-// -------------------- gversion --------------------
 def gverOut = layout.buildDirectory.dir("generated/sources/gversion/java")
 gversion {
     srcDir       = gverOut.get().asFile.absolutePath
@@ -176,7 +175,6 @@ tasks.withType(JavaCompile).configureEach {
 sourceSets { main { java.srcDir(gverOut) } }
 tasks.named("compileJava") { dependsOn("createVersionFile") }
 
-// -------------------- Javadoc (non-fatal + less strict) --------------------
 tasks.withType(Javadoc).configureEach {
     failOnError = false
     options.encoding = "UTF-8"

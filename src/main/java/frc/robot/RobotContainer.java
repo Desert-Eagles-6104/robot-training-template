@@ -8,14 +8,15 @@ import frc.DELib26.CANBus.CANBusStatusLogger;
 import frc.DELib26.autos.PathPlannerAutoBuilder;
 import frc.DELib26.controller.ControllerType;
 import frc.DELib26.controller.GenericController;
-import frc.DELib26.subsystems.swerve.SwerveIO;
-import frc.DELib26.subsystems.swerve.SwerveIOHardware;
-import frc.DELib26.subsystems.swerve.SwerveIOSim;
 import frc.DELib26.subsystems.swerve.SwerveSubsystem;
 import frc.DELib26.subsystems.swerve.swerveCommands.TeleopDrive;
+import frc.DELib26.subsystems.swerve.swerveIO.SwerveIO;
+import frc.DELib26.subsystems.swerve.swerveIO.SwerveIOHardware;
+import frc.DELib26.subsystems.swerve.swerveIO.SwerveIOSim;
 import frc.DELib26.subsystems.vision.VisionSubsystem;
 import frc.DELib26.util.RunMode;
 import frc.robot.constants.Constants;
+import frc.robot.constants.Constants.RobotConstants;
 import frc.robot.sim.FieldVisualization;
 import frc.robot.sim.SimCoordinator;
 import frc.robot.subsystems.vision.Vision2026;
@@ -32,62 +33,51 @@ public class RobotContainer {
 		return instance;
 	}
 
-	// logging
-	private static enum LoggingMode {
-		NONE,
-		BASIC,
-		EXTENDED
-	}
+	private final RobotConstants.LoggingMode loggingMode;
 
-	private final LoggingMode loggingMode;
 	// context
-	public final RobotModel robotModel = RobotModel.ROBOT_2026;
 	public final RobotState2026 robotState2026;
 	public final Optional<SimCoordinator> simCoordinator;
 	// controllers
 	// We use ps5 as default because that is what we use in the competition
 	public final GenericController driverController = ControllerType.PS5.buildController(0);
 	// subsystems
-	public final Constants constants;
 	public final SwerveSubsystem swerveSubsystem;
 	public final VisionSubsystem visionSubsystem;
 
 	// autos
 	public final PathPlannerAutoBuilder autoBuilder;
 
-	@SuppressWarnings("DuplicateBranches")
 	private RobotContainer() {
 		final boolean isSim = RunMode.isSim();
 
-		this.loggingMode = isSim ? LoggingMode.EXTENDED : LoggingMode.EXTENDED;
+		this.loggingMode = isSim ? RobotConstants.SIM_MODE : RobotConstants.REAL_MODE;
 
-		this.constants = this.robotModel.getConstants();
-
-		this.robotState2026 = new RobotState2026(this.constants.visionConfig);
+		this.robotState2026 = new RobotState2026();
 
 		final SwerveIO swerveIO = isSim
-				? new SwerveIOSim(this.constants.swerveConstants)
-				: new SwerveIOHardware(this.constants.swerveConstants);
+				? new SwerveIOSim(Constants.SwerveConstants.SWERVE_CONFIG)
+				: new SwerveIOHardware(Constants.SwerveConstants.SWERVE_CONFIG);
 
 		this.swerveSubsystem = new SwerveSubsystem(
 				swerveIO,
 				this.driverController,
-				this.constants.swerveConstants,
-				robotState2026);
+				Constants.SwerveConstants.SWERVE_CONFIG,
+				robotState2026
+			);
 
-		this.visionSubsystem = new Vision2026(this.constants.visionConfig, this.robotState2026);
+		this.visionSubsystem = new Vision2026(Constants.VisionConstants.VISION_CONFIG, this.robotState2026);
 
 		if (isSim) {
-			this.simCoordinator =  Optional.of(new SimCoordinator(
+			this.simCoordinator = Optional.of(new SimCoordinator(
 					this.robotState2026,
-					this.constants.simulationConstants.get(),
-					((SwerveIOSim) swerveIO).mapleSimSwerveDrivetrain.mapleSimDrive
-				));
+					((SwerveIOSim) swerveIO).mapleSimSwerveDrivetrain.mapleSimDrive)
+				);
 		} else {
 			this.simCoordinator = Optional.empty();
 		}
 
-		this.autoBuilder = new PathPlannerAutoBuilder(this.swerveSubsystem, this.constants);
+		this.autoBuilder = new PathPlannerAutoBuilder(this.swerveSubsystem, Constants.SwerveConstants.SWERVE_CONFIG);
 	}
 
 	public void configureTeleopBindings() {
@@ -104,7 +94,7 @@ public class RobotContainer {
 	}
 
 	public final void logTelemetry() {
-		if (this.loggingMode != LoggingMode.NONE) {
+		if (this.loggingMode != RobotConstants.LoggingMode.NONE) {
 
 			if (RunMode.isSim()) {
 				FieldVisualization.getInstance().updateViz();
@@ -117,10 +107,10 @@ public class RobotContainer {
 
 		}
 
-		if (this.loggingMode == LoggingMode.EXTENDED) {
+		if (this.loggingMode == RobotConstants.LoggingMode.EXTENDED) {
 			this.swerveSubsystem.logExtendedTelemetry();
 			this.visionSubsystem.logExtendedTelemetry();
-		} else if (this.loggingMode == LoggingMode.BASIC) {
+		} else if (this.loggingMode == RobotConstants.LoggingMode.BASIC) {
 			this.swerveSubsystem.logTelemetry();
 			this.visionSubsystem.logTelemetry();
 		}

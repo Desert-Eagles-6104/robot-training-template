@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.DELib26.subsystems.swerve.SwerveSubsystem;
 import frc.DELib26.subsystems.swerve.swerveCommands.DriveToPoint;
 import frc.robot.RobotContainer;
+import frc.robot.constants.Constants;
 
 import java.util.Set;
 import java.util.function.Supplier;
@@ -16,9 +17,11 @@ import java.util.function.Supplier;
 public class AutoCommands {
 	public static Command pathfindTo(Supplier<Pose2d> poseSupplier) {
 		return pathfindTo(
-				poseSupplier,
-				RobotContainer.getInstance().autoBuilder.getDefaultPathConstraints(
-						RobotContainer.getInstance().constants.swerveConstants));
+					poseSupplier,
+					RobotContainer.getInstance().autoBuilder.getDefaultPathConstraints(
+							Constants.SwerveConstants.SWERVE_CONFIG
+						)
+				);
 	}
 
 	public static Command pathfindTo(Supplier<Pose2d> poseSupplier, PathConstraints constraints) {

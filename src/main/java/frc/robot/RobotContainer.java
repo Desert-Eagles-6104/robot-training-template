@@ -11,7 +11,7 @@ import frc.DELib26.controller.GenericController;
 import frc.DELib26.subsystems.swerve.SwerveSubsystem;
 import frc.DELib26.subsystems.swerve.swerveCommands.TeleopDrive;
 import frc.DELib26.subsystems.swerve.swerveIO.SwerveIO;
-import frc.DELib26.subsystems.swerve.swerveIO.SwerveIOHardware;
+import frc.DELib26.subsystems.swerve.swerveIO.SwerveIONoop;
 import frc.DELib26.subsystems.swerve.swerveIO.SwerveIOSim;
 import frc.DELib26.subsystems.vision.VisionSubsystem;
 import frc.DELib26.util.RunMode;
@@ -57,7 +57,7 @@ public class RobotContainer {
 
 		final SwerveIO swerveIO = isSim
 				? new SwerveIOSim(Constants.SwerveConstants.SWERVE_CONFIG)
-				: new SwerveIOHardware(Constants.SwerveConstants.SWERVE_CONFIG);
+				: new SwerveIONoop();
 
 		this.swerveSubsystem = new SwerveSubsystem(
 				swerveIO,
